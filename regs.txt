@@ -1,0 +1,5 @@
+0. P - program counter reg
+1. S - stack pointer reg
+2. F - flags reg
+3. V - val reg
+4.

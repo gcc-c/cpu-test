@@ -1,0 +1,59 @@
+16 bit / inst
+
+16 regs (4 bits)
+
+0-7: op (8 bits) (8 bits free)
+
+
+0000.0000 0000.0001 = 1
+reg1 = 0000.0000
+reg0 = 0000.0001
+
+
+reg (16): reg0(8) + reg1(8)
+
+reg <- 0/1 + val (0 + 8 bits) (0 bits free) (0/1 in op)
+adr <- [reg] (4 + 4 bits) (0 bits free) (adr in reg)
+reg <- [adr] (4 + 4 bits) (0 bits free) (adr in reg)
+
+2^16=65536
+65536 adr 16 bit per => 1048576 bits mem
+
+
+
+0-x program
+x-y ???
+^
+|
+y-65536 stack
+
+//todo heap
+
+
+
+
+
+
+
+
+//reg <- val (10 bits)
+//reg <- [adr] (10 bits)
+//adr <- [reg] (10 bits)
+//reg <- [reg] (4 + 4 bits) (2 bits free)
+//reg <- op (4 bits) (6 bits free)
+
+
+//2^10 = 1024
+//1024 adr 16 bit per => 16384 bits mem
+
+
+
+
+
+
+//reg <- val (4 + 6 bits)
+//reg <- [adr] (4 + 6 bits)
+//reg <- [reg] (4 + 4 bits)
+//    adr <- val
+//    adr <- [adr]
+//adr <- [reg] (6 + 4 bits)
