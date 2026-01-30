@@ -1,10 +1,12 @@
 #include "settings.h"
 #include "inst.h"
 #include "f.h"
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <unistd.h>
 
-typedef union {
+/*typedef union {
     struct {
         uint16_t p,s,f,v;
     };
@@ -14,7 +16,9 @@ typedef union {
 struct {
     uint16_t mem[size_mem];
     registers regs;
-} cpu;
+} cpu;*/
+
+cpu_type cpu;
 
 void prepare(char* name) {
     cpu.regs.s = size_mem-1;
@@ -23,14 +27,19 @@ void prepare(char* name) {
     
     if (!file) { error("file doesnt exist!"); }
 
-    for (uint16_t i = 0; !feof(file); i++) {
-        uint16_t buf;
-        fread(&buf, sizeof(buf), 1, file);
-        cpu.mem[i] = buf;
+    // uint16_t buf;
+    uint8_t op, all_args;
+    uint16_t i = 0;
+    // for (uint16_t i = 0; !feof(file); i++) {
+    // while (fread(&buf, sizeof(buf), 1, file)) {
+    while (fread(&op, sizeof(op), 1, file)) {
+        // printf("%d\n", buf);
+        fread(&all_args, sizeof(all_args), 1, file);
+        // cpu.mem[i] = buf;
+        cpu.mem[i] = (op << 8) + all_args;
+        i++;
     }
-
-    //todo
-
+    
     fclose(file);
 }
 
@@ -82,6 +91,39 @@ void print_regs() {
     }
 }
 
+void execute(uint16_t inst) {
+    uint8_t op = inst >> 8;
+    uint8_t all_args = inst;
+    // printf("%d: %d; %d\n", inst, op, all_args); error("123");
+    instructions[op].func(all_args, &cpu);
+}
+
+bool auto_execution = 0;
+
+int run() {
+    while (1) {
+        // printf("%d\n", cpu.mem[4]);
+        print_memory();
+        print_regs();
+        execute(cpu.mem[cpu.regs.p]);
+        cpu.regs.p++;
+        // printf("p: %d\n", cpu.regs.p);
+        // system("sleep 1");
+        // sleep(1);
+        // getchar();
+        if (auto_execution) { continue; }
+        switch (getchar()) {
+            case key_auto:
+                auto_execution = 1; break;
+            case key_exit:
+                return 1; break;
+            default:
+                continue;
+        }
+    }
+    return 0;
+}
+
 int main(int argc, char* argv[]) {
     if (argc == 1) { error("no prog bin file provided!"); }
     
@@ -90,5 +132,5 @@ int main(int argc, char* argv[]) {
     // print_memory();
     // print_regs();
 
-    return 0;
+    return run();
 }

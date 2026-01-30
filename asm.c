@@ -1,5 +1,6 @@
 #include "f.h"
 #include "settings.h"
+#include "inst.h"
 // #include <stdint.h>
 #include <ctype.h>
 #include <stdint.h>
@@ -13,7 +14,7 @@
     bool reg;
 } arg;*/
 
-enum arg {VAL, REG};
+/*enum arg {VAL, REG};
 
 typedef struct {
     char* op;
@@ -21,9 +22,9 @@ typedef struct {
     char args_count;
     // arg args[2];
     enum arg args[2];
-} instruction;
+} instruction;*/
 
-instruction instructions[] = {
+/*instruction instructions[] = {
     {"NOP", 0, {}},
     {"SET", 2, {REG, REG}},
     {"VL0", 1, {VAL}},
@@ -38,9 +39,9 @@ instruction instructions[] = {
     {"SUB", 2, {REG, REG}},
     {"MUL", 2, {REG, REG}},
     {"DIV", 2, {REG, REG}},
-};
+};*/
 
-char regs[] = {'P', 'S', 'F', 'V', 'M'};
+char regs[] = {'P', 'S', 'F', 'V', 'M', ' ', ' ', ' ', ' ', ' ', 'A', 'B', 'C', 'X', 'Y', 'Z'};
 
 int parse_val(char* str, int warning_limit) {
     //todo bases
@@ -54,7 +55,7 @@ int parse_val(char* str, int warning_limit) {
 int parse_reg(char* str) {
     if (str[1] != '\0') { return strtol(str, 0, 10); }
     for (size_t i = 0; i < sizeof(regs)/sizeof(char); i++) {
-        if (regs[i] == str[0]) { return i; }
+        if (regs[i] == toupper(str[0])) { return i; }
     }
     return 0;
 }
@@ -66,7 +67,7 @@ int main(int argc, char* argv[]) {
 
     if (argc > 2) { bin_name = argv[2]; }
     else {
-        bin_name = malloc(sizeof(argv[1])+sizeof(char)*4);
+        bin_name = malloc(strlen(argv[1])+sizeof(".bin"));
         sprintf(bin_name, "%s.bin", argv[1]);
     }
 
@@ -127,7 +128,7 @@ int main(int argc, char* argv[]) {
         uint8_t all_args = 0;
 
         bool g = 0;
-        for (size_t i = 0; i < sizeof(instructions)/sizeof(instruction); i++) {
+        for (size_t i = 0; i < instructions_count; i++) {
             // printf("%s %s\n", inst.op, instructions[i].op);
             if (strcmp(inst.op, instructions[i].op) == 0) {
                 g = 1;
@@ -151,6 +152,7 @@ int main(int argc, char* argv[]) {
             }
         }
         if (!g) { printf("line %d\n", line); error("unknown op"); }
+        // printf("line %d\nop: %d\nargs: %d\n", line, op, all_args);
         fwrite(&op, sizeof(uint8_t), 1, bin);
         fwrite(&all_args, sizeof(uint8_t), 1, bin);
     }

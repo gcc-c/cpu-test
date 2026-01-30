@@ -1,2 +1,2 @@
 #!/bin/bash
-gcc -Wall -Wextra asm.c f.c -o asm && ./asm $@
+gcc -Wno-unused-parameter -Wall -Wextra asm.c f.c inst.c -o asm && ./asm $@

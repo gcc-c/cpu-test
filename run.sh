@@ -1,2 +1,2 @@
 #!/bin/bash
-gcc -Wall -Wextra main.c f.c inst.c -o main && ./main $@
+gcc -Wno-unused-parameter -Wall -Wextra main.c f.c inst.c -o main && ./main $@
