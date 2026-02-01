@@ -146,10 +146,17 @@ int main(int argc, char* argv[]) {
                 else if (args_count < instructions[i].args_count) { error("not enough args"); }
                 
                 if (instructions[i].args_count == 0) { break; }
-                if (instructions[i].args[0] == VAL) { all_args = parse_val(inst.arg1, size_mem); break; }
-                if (instructions[i].args_count == 1) { all_args = parse_reg(inst.arg1); break; }
-                all_args = parse_reg(inst.arg1) << 4;
-                all_args += parse_reg(inst.arg2); break;
+                // if (instructions[i].args[0] == VAL) { all_args = parse_val(inst.arg1, size_mem); break; }
+                // if (instructions[i].args_count == 1) { all_args = parse_reg(inst.arg1); break; }
+                // all_args = parse_reg(inst.arg1) << 4;
+                // all_args += parse_reg(inst.arg2); break;
+                if (instructions[i].args_count == 1) {
+                    // all_args = (instructions[i].args[0] == REG) ? parse_reg(inst.arg1) : parse_val(inst.arg1, size_mem); break;
+                    all_args = (instructions[i].args[0] == REG) ? parse_reg(inst.arg1) : ((instructions[i].args[0] == VAL8) ? parse_val(inst.arg1, size_mem) : parse_val(inst.arg1, size_reg));
+                    break;
+                }
+                all_args = ((instructions[i].args[0] == REG) ? parse_reg(inst.arg1) : parse_val(inst.arg1, size_reg)) << 4;
+                all_args += (instructions[i].args[1] == REG) ? parse_reg(inst.arg2) : parse_val(inst.arg2, size_reg);
             }
         }
         if (!g) { printf("line %d\n", line); error("unknown op"); }

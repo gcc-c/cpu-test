@@ -12,3 +12,5 @@
 11. SUB <4 1reg> <4 2reg> - M reg = 1reg - 2reg
 12. MUL <4 1reg> <4 2reg> - M reg = 1reg * 2reg
 13. DIV <4 1reg> <4 2reg> - M reg = 1reg / 2reg
+14. CMP <4 1reg> <4 2reg> - compare 1reg to 2reg and set F reg bits
+15. SPI <4 reg> <4 val> - set P reg to reg if F reg on bit val eq 1

@@ -12,3 +12,11 @@ idk //todo
 15. Z
 
 A,B,C,X,Y,Z - general purpose regs
+
+flags reg bits:
+0. ==
+1. !=
+2. >
+3. >=
+4. <
+5. <=

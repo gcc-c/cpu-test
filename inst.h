@@ -2,6 +2,7 @@
 #include "settings.h"
 #include <stddef.h>
 #include <stdint.h>
+#include <stdio.h>
 
 typedef union {
     struct {
@@ -15,7 +16,7 @@ typedef struct {
     registers regs;
 } cpu_type;
 
-enum arg {VAL, REG};
+enum arg {VAL4, VAL8, REG};
 
 typedef struct {
     char* op;
@@ -40,6 +41,8 @@ void inst_add(uint8_t all_args, cpu_type* cpu);
 void inst_sub(uint8_t all_args, cpu_type* cpu);
 void inst_mul(uint8_t all_args, cpu_type* cpu);
 void inst_div(uint8_t all_args, cpu_type* cpu);
+void inst_cmp(uint8_t all_args, cpu_type* cpu);
+void inst_spi(uint8_t all_args, cpu_type* cpu);
 
 extern const instruction instructions[];
 extern const size_t instructions_count;
