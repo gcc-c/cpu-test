@@ -14,3 +14,4 @@
 13. DIV <4 1reg> <4 2reg> - M reg = 1reg / 2reg
 14. CMP <4 1reg> <4 2reg> - compare 1reg to 2reg and set F reg bits
 15. SPI <4 reg> <4 val> - set P reg to reg if F reg on bit val eq 1
+16. SYS <4 reg> - syscall or smth idk 
