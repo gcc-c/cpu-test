@@ -13,7 +13,9 @@ inc v
 stw v
 vl0 33
 stw v
-vl0 3
+vl0 10
+stw v
+vl0 4
 stw v
 
 inc a

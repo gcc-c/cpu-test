@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <string.h>
 #include <unistd.h>
 
 /*typedef union {
@@ -98,19 +99,21 @@ void execute(uint16_t inst) {
     instructions[op].func(all_args, &cpu);
 }
 
-bool auto_execution = 0;
+bool auto_execution = 1;
+bool debug = 0;
 
 int run() {
     while (1) {
         // printf("%d\n", cpu.mem[4]);
-        print_memory();
-        print_regs();
         execute(cpu.mem[cpu.regs.p]);
         cpu.regs.p++;
         // printf("p: %d\n", cpu.regs.p);
         // system("sleep 1");
         // sleep(1);
         // getchar();
+        if (!debug) { continue; }
+        print_memory();
+        print_regs();
         if (auto_execution) { continue; }
         switch (getchar()) {
             case key_auto:
@@ -126,6 +129,13 @@ int run() {
 
 int main(int argc, char* argv[]) {
     if (argc == 1) { error("no prog bin file provided!"); }
+
+    if (argc > 2) {
+        if (strcmp(argv[2], "-d") == 0) {
+            debug = 1;
+            auto_execution = 0;
+        }
+    }
     
     prepare(argv[1]);
 

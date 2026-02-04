@@ -4,8 +4,13 @@ stack:
 1. output to console
 stack:
     i
-    char i-2 char i-1
-    char i-4 char i-3
+    char i-1
+    char i-2
     ...
-    char 1 char 0
+    char 0
+
+    //char i-2 char i-1
+    //char i-4 char i-3
+    //...
+    //char 1 char 0
 2. input from console

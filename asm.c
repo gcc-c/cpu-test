@@ -99,6 +99,15 @@ int main(int argc, char* argv[]) {
         // char op[256] = "";
         // char arg1[256] = "";
         // char arg2[256] = "";
+        if (buf[0] == '#') {
+            uint16_t raw = parse_val(buf+1, size_mem);
+            uint8_t raw1 = raw >> 8;
+            uint8_t raw2 = raw & 0b0000000011111111;
+            fwrite(&raw1, sizeof(raw1), 1, bin);
+            fwrite(&raw2, sizeof(raw2), 1, bin);
+            // fwrite(&raw, sizeof(raw), 1, bin);
+            continue;
+        }
         for (size_t i = 0; i < sizeof(buf)/sizeof(char); i++) {
             if (buf[i] == '\n' || buf[i] == '\0' || (buf[i] == '/' && i < sizeof(buf)/sizeof(char)-1 && buf[i+1] == '/')) {
                 break;
@@ -152,7 +161,7 @@ int main(int argc, char* argv[]) {
                 // all_args += parse_reg(inst.arg2); break;
                 if (instructions[i].args_count == 1) {
                     // all_args = (instructions[i].args[0] == REG) ? parse_reg(inst.arg1) : parse_val(inst.arg1, size_mem); break;
-                    all_args = (instructions[i].args[0] == REG) ? parse_reg(inst.arg1) : ((instructions[i].args[0] == VAL8) ? parse_val(inst.arg1, size_mem) : parse_val(inst.arg1, size_reg));
+                    all_args = (instructions[i].args[0] == REG) ? parse_reg(inst.arg1) : ((instructions[i].args[0] == VAL8) ? parse_val(inst.arg1, size_val8) : parse_val(inst.arg1, size_reg));
                     break;
                 }
                 all_args = ((instructions[i].args[0] == REG) ? parse_reg(inst.arg1) : parse_val(inst.arg1, size_reg)) << 4;
@@ -161,8 +170,8 @@ int main(int argc, char* argv[]) {
         }
         if (!g) { printf("line %d\n", line); error("unknown op"); }
         // printf("line %d\nop: %d\nargs: %d\n", line, op, all_args);
-        fwrite(&op, sizeof(uint8_t), 1, bin);
-        fwrite(&all_args, sizeof(uint8_t), 1, bin);
+        fwrite(&op, sizeof(op), 1, bin);
+        fwrite(&all_args, sizeof(all_args), 1, bin);
     }
 
     fclose(source);
